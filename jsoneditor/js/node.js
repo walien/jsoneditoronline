@@ -1520,34 +1520,51 @@ jsoneditor.Node.prototype.updateDom = function (options) {
 
     // update value
     var domValue = this.dom.value;
-    if (domValue) {
-        var count = this.childs ? this.childs.length : 0;
-        if (this.type == 'array') {
-            domValue.innerHTML = '[' + count + ']';
-            domValue.title = this.type + ' containing ' + count + ' items';
-        }
-        else if (this.type == 'object') {
-            domValue.innerHTML = '{' + count + '}';
-            domValue.title = this.type + ' containing ' + count + ' items';
-        }
-        // @eoriou
-        else if (this.type == 'value') {
-            domValue.contentEditable = false;
-            domValue.innerHTML = "";
-            var select = document.createElement('select');
-            select.setAttribute("ng-options", "v.name for v in scenario.values");
-            select.innerHTML = "<option>pouet</option><option>machin</option>";
+    var valueEditorFunc = this.editor.options.valueEditor;
+    var defaultValEditor = true;
 
-            domValue.className = "";
-            domValue.appendChild(select);
-            delete domValue.title;
+    if (domValue) {
+        if (valueEditorFunc) {
+            var valEditor = valueEditorFunc(this);
+            if (valEditor) {
+                defaultValEditor = false;
+                domValue.innerHTML = "";
+                domValue.contentEditable = false;
+                domValue.appendChild(valEditor[0]);
+                delete domValue.title;
+            }
         }
-        else {
-            // @eoriou
-            domValue.contentEditable = this.editor.mode.editor;
-            domValue.className = "value";
-            domValue.innerHTML = this._escapeHTML(this.value);
-            delete domValue.title;
+
+        if (defaultValEditor) {
+
+            var count = this.childs ? this.childs.length : 0;
+            if (this.type == 'array') {
+                domValue.innerHTML = '[' + count + ']';
+                domValue.title = this.type + ' containing ' + count + ' items';
+            }
+            else if (this.type == 'object') {
+                domValue.innerHTML = '{' + count + '}';
+                domValue.title = this.type + ' containing ' + count + ' items';
+            }
+//        // @eoriou
+//        else if (this.type == 'value') {
+//            domValue.contentEditable = false;
+//            domValue.innerHTML = "";
+//            var select = document.createElement('select');
+//            select.setAttribute("ng-options", "v.name for v in scenario.values");
+//            // select.innerHTML = "<option>pouet</option><option>machin</option>";
+//
+//            domValue.className = "";
+//            domValue.appendChild(select);
+//            delete domValue.title;
+//        }
+            else {
+                // @eoriou
+                domValue.contentEditable = this.editor.mode.editor;
+                domValue.className = "value";
+                domValue.innerHTML = this._escapeHTML(this.value);
+                delete domValue.title;
+            }
         }
     }
 
@@ -1780,44 +1797,44 @@ jsoneditor.Node.prototype.onEvent = function (event) {
     var domValue = dom.value;
     // @eoriou
     //if (target == domValue) {
-        switch (type) {
-            case 'focus':
-                jsoneditor.JSONEditor.focusNode = this;
-                break;
+    switch (type) {
+        case 'focus':
+            jsoneditor.JSONEditor.focusNode = this;
+            break;
 
-            case 'blur':
-            case 'change':
-                this._getDomValue(true);
-                this._updateDomValue();
-                if (this.value) {
-                    //    @eoriou
-                    //    domValue.innerHTML = this._escapeHTML(this.value);
-                }
-                break;
+        case 'blur':
+        case 'change':
+            this._getDomValue(true);
+            this._updateDomValue();
+            if (this.value) {
+                //    @eoriou
+                //    domValue.innerHTML = this._escapeHTML(this.value);
+            }
+            break;
 
-            case 'input':
-                this._getDomValue(true);
-                this._updateDomValue();
-                break;
+        case 'input':
+            this._getDomValue(true);
+            this._updateDomValue();
+            break;
 
-            case 'keydown':
-            case 'mousedown':
-                this.editor.selection = this.editor.getSelection();
-                break;
+        case 'keydown':
+        case 'mousedown':
+            this.editor.selection = this.editor.getSelection();
+            break;
 
-            case 'keyup':
-                this._getDomValue(true);
-                this._updateDomValue();
-                break;
+        case 'keyup':
+            this._getDomValue(true);
+            this._updateDomValue();
+            break;
 
-            case 'cut':
-            case 'paste':
-                setTimeout(function () {
-                    node._getDomValue(true);
-                    node._updateDomValue();
-                }, 1);
-                break;
-        }
+        case 'cut':
+        case 'paste':
+            setTimeout(function () {
+                node._getDomValue(true);
+                node._updateDomValue();
+            }, 1);
+            break;
+    }
     //}
 
     // field events
