@@ -148,39 +148,55 @@ jsoneditor.AppendNode.prototype.showContextMenu = function (anchor, onClose) {
             'submenuTitle': 'Select the type of the field to be appended',
             'className': 'insert',
             'click': function () {
-                node._onAppend('', '', 'auto');
+                // @eoriou
+                // node._onAppend('', '', 'auto');
             },
             'submenu': [
+                // @eoriou
+//                {
+//                    'text': 'Auto',
+//                    'className': 'type-auto',
+//                    'title': titles.auto,
+//                    'click': function () {
+//                        node._onAppend('', '', 'auto');
+//                    }
+//                },
+//                {
+//                    'text': 'Array',
+//                    'className': 'type-array',
+//                    'title': titles.array,
+//                    'click': function () {
+//                        node._onAppend('', []);
+//                    }
+//                },
                 {
-                    'text': 'Auto',
-                    'className': 'type-auto',
-                    'title': titles.auto,
-                    'click': function () {
-                        node._onAppend('', '', 'auto');
-                    }
-                },
-                {
-                    'text': 'Array',
-                    'className': 'type-array',
-                    'title': titles.array,
-                    'click': function () {
-                        node._onAppend('', []);
-                    }
-                },
-                {
-                    'text': 'Object',
-                    'className': 'type-object',
+                    'text': 'Segment',
+                    'className': 'type-object' +
+                        (this.type == 'object' ? ' selected' : ''),
                     'title': titles.object,
                     'click': function () {
                         node._onAppend('', {});
                     }
                 },
                 {
-                    'text': 'String',
-                    'className': 'type-string',
+                    'type': 'separator'
+                },
+                {
+                    'text': 'Constant',
+                    'className': 'type-string' +
+                        (this.type == 'string' ? ' selected' : ''),
                     'title': titles.string,
                     'click': function () {
                         node._onAppend('', '', 'string');
+                    }
+                },
+                {
+                    'text': 'Value',
+                    'className': 'type-value' +
+                        (this.type == 'value' ? ' selected' : ''),
+                    'title': titles.string,
+                    'click': function () {
+                        node._onAppend('', '', 'value');
                     }
                 }
             ]

@@ -433,6 +433,10 @@ jsoneditor.util.getInnerText = function (element, buffer) {
                 innerText += buffer.flush();
                 buffer.set('\n');
             }
+            // @eoriou
+            else if (child.nodeName == 'SELECT') {
+                innerText += child.options[child.selectedIndex].value;
+            }
             else {
                 innerText += jsoneditor.util.getInnerText(child, buffer);
             }
