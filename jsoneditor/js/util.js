@@ -24,10 +24,10 @@ jsoneditor.util = {};
 // Internet Explorer 8 and older does not support Array.indexOf,
 // so we define it here in that case
 // http://soledadpenades.com/2007/05/17/arrayindexof-in-internet-explorer/
-if(!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function(obj){
-        for(var i = 0; i < this.length; i++){
-            if(this[i] == obj){
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (obj) {
+        for (var i = 0; i < this.length; i++) {
+            if (this[i] == obj) {
                 return i;
             }
         }
@@ -39,8 +39,8 @@ if(!Array.prototype.indexOf) {
 // so we define it here in that case
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach
 if (!Array.prototype.forEach) {
-    Array.prototype.forEach = function(fn, scope) {
-        for(var i = 0, len = this.length; i < len; ++i) {
+    Array.prototype.forEach = function (fn, scope) {
+        for (var i = 0, len = this.length; i < len; ++i) {
             fn.call(scope || this, this[i], i, this);
         }
     }
@@ -49,7 +49,8 @@ if (!Array.prototype.forEach) {
 // Old browsers do not have a console, so create a fake one in that case.
 if (typeof console === 'undefined') {
     console = {
-        log: function () {}
+        log: function () {
+        }
     };
 }
 
@@ -195,7 +196,7 @@ jsoneditor.util.getWindowHeight = function () {
  * @param {Element} elem
  * @param {String} className
  */
-jsoneditor.util.addClassName = function(elem, className) {
+jsoneditor.util.addClassName = function (elem, className) {
     var classes = elem.className.split(' ');
     if (classes.indexOf(className) == -1) {
         classes.push(className); // add the class to the array
@@ -208,7 +209,7 @@ jsoneditor.util.addClassName = function(elem, className) {
  * @param {Element} elem
  * @param {String} className
  */
-jsoneditor.util.removeClassName = function(elem, className) {
+jsoneditor.util.removeClassName = function (elem, className) {
     var classes = elem.className.split(' ');
     var index = classes.indexOf(className);
     if (index != -1) {
@@ -258,7 +259,7 @@ jsoneditor.util.stripFormatting = function (divElement) {
  */
 jsoneditor.util.setEndOfContentEditable = function (contentEditableElement) {
     var range, selection;
-    if(document.createRange) {//Firefox, Chrome, Opera, Safari, IE 9+
+    if (document.createRange) {//Firefox, Chrome, Opera, Safari, IE 9+
         range = document.createRange();//Create a range (a range is a like the selection but invisible)
         range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
         range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
@@ -266,7 +267,7 @@ jsoneditor.util.setEndOfContentEditable = function (contentEditableElement) {
         selection.removeAllRanges();//remove any selections already made
         selection.addRange(range);//make the range you have just created the visible selection
     }
-    else if(document.selection) {//IE 8 and lower
+    else if (document.selection) {//IE 8 and lower
         range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
         range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
         range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
@@ -345,7 +346,7 @@ jsoneditor.util.getSelectionOffset = function () {
     var range = jsoneditor.util.getSelection();
 
     if (range && 'startOffset' in range && 'endOffset' in range &&
-            range.startContainer && (range.startContainer == range.endContainer)) {
+        range.startContainer && (range.startContainer == range.endContainer)) {
         return {
             startOffset: range.startOffset,
             endOffset: range.endOffset,
@@ -369,7 +370,7 @@ jsoneditor.util.getSelectionOffset = function () {
 jsoneditor.util.setSelectionOffset = function (params) {
     if (document.createRange && window.getSelection) {
         var selection = window.getSelection();
-        if(selection) {
+        if (selection) {
             var range = document.createRange();
             // TODO: do not suppose that the first child of the container is a textnode,
             //       but recursively find the textnodes
@@ -435,7 +436,9 @@ jsoneditor.util.getInnerText = function (element, buffer) {
             }
             // @eoriou
             else if (child.nodeName == 'SELECT') {
-                innerText += child.options[child.selectedIndex].value;
+                if (child.options[child.selectedIndex]) {
+                    innerText += child.options[child.selectedIndex].value;
+                }
             }
             else {
                 innerText += jsoneditor.util.getInnerText(child, buffer);
@@ -465,15 +468,14 @@ jsoneditor.util.getInnerText = function (element, buffer) {
  * Source: http://msdn.microsoft.com/en-us/library/ms537509(v=vs.85).aspx
  * @return {Number} Internet Explorer version, or -1 in case of an other browser
  */
-jsoneditor.util.getInternetExplorerVersion = function() {
+jsoneditor.util.getInternetExplorerVersion = function () {
     if (_ieVersion == -1) {
         var rv = -1; // Return value assumes failure.
-        if (navigator.appName == 'Microsoft Internet Explorer')
-        {
+        if (navigator.appName == 'Microsoft Internet Explorer') {
             var ua = navigator.userAgent;
-            var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+            var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
             if (re.exec(ua) != null) {
-                rv = parseFloat( RegExp.$1 );
+                rv = parseFloat(RegExp.$1);
             }
         }
 
@@ -527,7 +529,7 @@ jsoneditor.util.addEventListener = function (element, action, listener, useCaptu
  * @param {function} listener  The listener function
  * @param {boolean}  [useCapture]   false by default
  */
-jsoneditor.util.removeEventListener = function(element, action, listener, useCapture) {
+jsoneditor.util.removeEventListener = function (element, action, listener, useCapture) {
     if (element.removeEventListener) {
         // non-IE browsers
         if (useCapture === undefined)

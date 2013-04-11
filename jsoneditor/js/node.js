@@ -1023,7 +1023,7 @@ jsoneditor.Node.prototype._updateDomValue = function () {
         domValue.style.color = color;
 
         // make backgound color lightgray when empty
-        var isEmpty = (String(this.value) == '' && this.type != 'array' && this.type != 'object');
+        var isEmpty = (String(this.value) == '' && this.type != 'array' && this.type != 'object' && this.type != 'value');
         if (isEmpty) {
             jsoneditor.util.addClassName(domValue, 'empty');
         }
@@ -1529,6 +1529,7 @@ jsoneditor.Node.prototype.updateDom = function (options) {
             if (valEditor) {
                 defaultValEditor = false;
                 domValue.innerHTML = "";
+                domValue.className = "";
                 domValue.contentEditable = false;
                 domValue.appendChild(valEditor[0]);
                 delete domValue.title;
@@ -1536,7 +1537,6 @@ jsoneditor.Node.prototype.updateDom = function (options) {
         }
 
         if (defaultValEditor) {
-
             var count = this.childs ? this.childs.length : 0;
             if (this.type == 'array') {
                 domValue.innerHTML = '[' + count + ']';
@@ -1652,9 +1652,8 @@ jsoneditor.Node.prototype._createDomValue = function () {
     }
     // @eoriou
     else if (this.type == 'value') {
-        domValue = document.createElement('select');
+        domValue = document.createElement('div');
         domValue.className = '';
-        domValue.innerHTML = "<option>pouet</option><option>machin</option>";
     }
     else {
         domValue = document.createElement('div');
