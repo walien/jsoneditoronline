@@ -1806,7 +1806,7 @@ jsoneditor.Node.prototype.onEvent = function (event) {
             this._getDomValue(true);
             this._updateDomValue();
             if (this.value) {
-                //    @eoriou
+                //    @eoriou 
                 //    domValue.innerHTML = this._escapeHTML(this.value);
             }
             break;
