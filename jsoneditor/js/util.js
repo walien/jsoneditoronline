@@ -161,7 +161,7 @@ jsoneditor.util.getMouseY = function (event) {
 /**
  * Get the absolute, horizontal mouse position from an event.
  * @param {Event} event
- * @return {Number} mouseX
+ * @return {Number} mouseX 
  */
 jsoneditor.util.getMouseX = function (event) {
     var mouseX;
