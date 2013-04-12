@@ -956,8 +956,11 @@ jsoneditor.Node.prototype._getDomValue = function (silent) {
         try {
             // retrieve the value
             var value;
-            if (this.type == 'string' || this.type == 'value') {
+            if (this.type == 'string') {
                 value = this._unescapeHTML(this.valueInnerText);
+            }
+            if (this.type == 'value') {
+                value = this._unescapeHTML("#" + this.valueInnerText + "#");
             }
             else {
                 var str = this._unescapeHTML(this.valueInnerText);
@@ -1046,7 +1049,7 @@ jsoneditor.Node.prototype._updateDomValue = function () {
         }
 
         // strip formatting from the contents of the editable div
-        jsoneditor.util.stripFormatting(domValue);
+        //jsoneditor.util.stripFormatting(domValue);
     }
 };
 
@@ -1523,16 +1526,17 @@ jsoneditor.Node.prototype.updateDom = function (options) {
     var valueEditorFunc = this.editor.options.valueEditor;
     var defaultValEditor = true;
 
+    // @eoriou
     if (domValue) {
         if (valueEditorFunc) {
+            domValue.contentEditable = false;
             var valEditor = valueEditorFunc(this);
             if (valEditor) {
+                //domValue.innerHTML = "";
+                //domValue.className = "";
                 defaultValEditor = false;
-                domValue.innerHTML = "";
-                domValue.className = "";
-                domValue.contentEditable = false;
-                domValue.appendChild(valEditor[0]);
-                delete domValue.title;
+                //domValue.appendChild(valEditor[0]);
+                //delete domValue.title;
             }
         }
 
@@ -2810,6 +2814,10 @@ jsoneditor.Node.prototype._getType = function (value) {
     }
     if (value instanceof Object) {
         return 'object';
+    }
+    // @eoriou
+    if (typeof(value) == 'string' && value.charAt(0) == '#' && value.charAt(value.length - 1) == '#') {
+        return 'value';
     }
     if (typeof(value) == 'string' && typeof(this._stringCast(value)) != 'string') {
         return 'string';

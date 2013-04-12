@@ -219,6 +219,31 @@ jsoneditor.util.removeClassName = function (elem, className) {
 };
 
 /**
+ * Set focus to the end of an editable div
+ * code from Nico Burns
+ * http://stackoverflow.com/users/140293/nico-burns
+ * http://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity
+ * @param {Element} contentEditableElement   A content editable div
+ */
+jsoneditor.util.setEndOfContentEditable = function (contentEditableElement) {
+    var range, selection;
+    if (document.createRange) {//Firefox, Chrome, Opera, Safari, IE 9+
+        range = document.createRange();//Create a range (a range is a like the selection but invisible)
+        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        selection = window.getSelection();//get the selection object (allows you to change selection)
+        selection.removeAllRanges();//remove any selections already made
+        selection.addRange(range);//make the range you have just created the visible selection
+    }
+    else if (document.selection) {//IE 8 and lower
+        range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
+        range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        range.select();//Select the range (make it the visible selection
+    }
+};
+
+/**
  * Strip the formatting from the contents of a div
  * the formatting from the div itself is not stripped, only from its childs.
  * @param {Element} divElement
@@ -247,31 +272,6 @@ jsoneditor.util.stripFormatting = function (divElement) {
 
         // recursively strip childs
         jsoneditor.util.stripFormatting(child);
-    }
-};
-
-/**
- * Set focus to the end of an editable div
- * code from Nico Burns
- * http://stackoverflow.com/users/140293/nico-burns
- * http://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity
- * @param {Element} contentEditableElement   A content editable div
- */
-jsoneditor.util.setEndOfContentEditable = function (contentEditableElement) {
-    var range, selection;
-    if (document.createRange) {//Firefox, Chrome, Opera, Safari, IE 9+
-        range = document.createRange();//Create a range (a range is a like the selection but invisible)
-        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-        selection = window.getSelection();//get the selection object (allows you to change selection)
-        selection.removeAllRanges();//remove any selections already made
-        selection.addRange(range);//make the range you have just created the visible selection
-    }
-    else if (document.selection) {//IE 8 and lower
-        range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
-        range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-        range.select();//Select the range (make it the visible selection
     }
 };
 
@@ -437,7 +437,7 @@ jsoneditor.util.getInnerText = function (element, buffer) {
             // @eoriou
             else if (child.nodeName == 'SELECT') {
                 if (child.options[child.selectedIndex]) {
-                    innerText += child.options[child.selectedIndex].value;
+                    innerText += child.options[child.selectedIndex].text;
                 }
             }
             else {
