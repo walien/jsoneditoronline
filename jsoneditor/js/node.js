@@ -936,8 +936,6 @@ jsoneditor.Node.prototype.changeType = function (newType) {
         this.focus();
     }
 
-    console.log(this);
-
     this.updateDom({'updateIndexes': true});
 };
 
@@ -1526,17 +1524,12 @@ jsoneditor.Node.prototype.updateDom = function (options) {
     var valueEditorFunc = this.editor.options.valueEditor;
     var defaultValEditor = true;
 
-    // @eoriou
     if (domValue) {
+        // @eoriou
         if (valueEditorFunc) {
-            domValue.contentEditable = false;
             var valEditor = valueEditorFunc(this);
             if (valEditor) {
-                //domValue.innerHTML = "";
-                //domValue.className = "";
                 defaultValEditor = false;
-                //domValue.appendChild(valEditor[0]);
-                //delete domValue.title;
             }
         }
 
@@ -1550,18 +1543,6 @@ jsoneditor.Node.prototype.updateDom = function (options) {
                 domValue.innerHTML = '{' + count + '}';
                 domValue.title = this.type + ' containing ' + count + ' items';
             }
-//        // @eoriou
-//        else if (this.type == 'value') {
-//            domValue.contentEditable = false;
-//            domValue.innerHTML = "";
-//            var select = document.createElement('select');
-//            select.setAttribute("ng-options", "v.name for v in scenario.values");
-//            // select.innerHTML = "<option>pouet</option><option>machin</option>";
-//
-//            domValue.className = "";
-//            domValue.appendChild(select);
-//            delete domValue.title;
-//        }
             else {
                 // @eoriou
                 domValue.contentEditable = this.editor.mode.editor;
