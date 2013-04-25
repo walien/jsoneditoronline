@@ -957,7 +957,7 @@ jsoneditor.Node.prototype._getDomValue = function (silent) {
             if (this.type == 'string') {
                 value = this._unescapeHTML(this.valueInnerText);
             }
-            if (this.type == 'value') {
+            else if (this.type == 'value') {
                 value = this._unescapeHTML("#" + this.valueInnerText + "#");
             }
             else {
