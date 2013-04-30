@@ -720,3 +720,54 @@ jsoneditor.JSONEditor.prototype._createTable = function () {
 
     this.frame.appendChild(contentOuter);
 };
+
+/**
+ * Display a node by expanding its parent providing its path (like "/ANCESTOR/PARENT/ATTRIBUTE")
+ * @param path The path of the node to display
+ * @author eoriou
+ */
+jsoneditor.JSONEditor.prototype.displayNodeByPath = function (path) {
+
+    // Split the path (by '/' separator)
+    var elts = path.split('/');
+
+    var recursiveExpandoFct = function (node, elts) {
+        if (!node.childs) {
+            return;
+        }
+        node.childs.forEach(function (child) {
+            if (elts[0] == '') {
+                elts.splice(0, 1);
+            }
+
+            // Compare the node field
+            if (elts[0] == child.field) {
+                child.expand(false);
+
+                // Go recursively on child
+                if (elts.length > 0) {
+                    elts.splice(0, 1);
+
+                    // The last node has been found
+                    if (elts.length == 0) {
+                        // Highlight it (temporarily)
+                        jsoneditor.util.addClassName(child.dom.field, 'highlight');
+                        setTimeout(function () {
+                            jsoneditor.util.removeClassName(child.dom.field, 'highlight');
+                        }, 2000);
+                        // Scroll to the node
+                        $(window).scrollTop($(child.dom.field).offset().top);
+                    } else {
+                        recursiveExpandoFct(child, elts);
+                    }
+                }
+            }
+        });
+    };
+
+    // Expand the root node
+    this.node.expand(false);
+
+    // Expand recursively nodes
+    recursiveExpandoFct(this.node, elts);
+};
