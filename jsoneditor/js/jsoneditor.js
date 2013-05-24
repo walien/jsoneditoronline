@@ -740,10 +740,8 @@ jsoneditor.JSONEditor.prototype.displayNodeByPath = function (path) {
             // If the path fragment is empty : continue
             if (elts[0] == '') {
                 elts.splice(0, 1);
-            }
-
-            // If the path fragment starts with ':' => An attribute is requested
-            if (elts[0][0] == ':') {
+            } else if (elts[0] != undefined && elts[0][0] == ':') {
+                // If the path fragment starts with ':' => An attribute is requested
                 elts[0] = elts[0].substring(1);
             }
 
