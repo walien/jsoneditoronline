@@ -736,8 +736,15 @@ jsoneditor.JSONEditor.prototype.displayNodeByPath = function (path) {
             return;
         }
         node.childs.forEach(function (child) {
+
+            // If the path fragment is empty : continue
             if (elts[0] == '') {
                 elts.splice(0, 1);
+            }
+
+            // If the path fragment starts with ':' => An attribute is requested
+            if (elts[0][0] == ':') {
+                elts[0] = elts[0].substring(1);
             }
 
             // Compare the node field
