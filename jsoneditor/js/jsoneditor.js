@@ -43,7 +43,7 @@ jsoneditor.JSONEditor = function (container, options, json) {
 
     // check availability of JSON parser (not available in IE7 and older)
     if (typeof(JSON) == 'undefined') {
-        throw new Error ('Your browser does not support JSON. \n\n' +
+        throw new Error('Your browser does not support JSON. \n\n' +
             'Please install the newest version of your browser.\n' +
             '(all modern browsers support JSON).');
     }
@@ -322,7 +322,7 @@ jsoneditor.JSONEditor.prototype.startAutoScroll = function (mouseY) {
         this.autoScrollStep = ((top + margin) - mouseY) / 3;
     }
     else if (mouseY > bottom - margin &&
-            height + content.scrollTop < content.scrollHeight) {
+        height + content.scrollTop < content.scrollHeight) {
         this.autoScrollStep = ((bottom - margin) - mouseY) / 3;
     }
     else {
@@ -722,7 +722,7 @@ jsoneditor.JSONEditor.prototype._createTable = function () {
 };
 
 /**
- * Display a node by expanding its parent providing its path (like "/ANCESTOR/PARENT/ATTRIBUTE")
+ * Display a node by expanding its parent providing its path (like "/ANCESTOR/PARENT/:ATTRIBUTE")
  * @param path The path of the node to display
  * @author eoriou
  */

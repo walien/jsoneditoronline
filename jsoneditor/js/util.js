@@ -581,3 +581,22 @@ jsoneditor.util.preventDefault = function (event) {
         event.returnValue = false;  // IE browsers
     }
 };
+
+/**
+ * Compute the path of a node
+ */
+jsoneditor.util.computeNodePath = function (node) {
+
+    // Build the path of the node
+    var path = ":" + node.field;
+    var parent = node.parent;
+    while (parent != null) {
+        if (parent.parent != null) {
+            path = parent.field + "/" + path;
+        } else {
+            path = "/" + path;
+        }
+        parent = parent.parent;
+    }
+    return path;
+};
